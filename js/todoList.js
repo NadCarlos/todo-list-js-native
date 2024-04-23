@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let image_array = ['gkill.jpg', 'itr.png', 'messi.webp']
 
-    let tasks = [
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [
         {
             id: 1,
             name: "Recover Artifact",
@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     ];
 
+    let saveTasks = () => {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    };
+
     let renderTasks = () => {
         taskList.innerHTML = '';
         tasks.forEach(task => {
@@ -28,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             completeButton.textContent = 'Complete';
             completeButton.addEventListener('click', () => {
                 task.completed = !task.completed;
+                saveTasks();
                 renderTasks();
             });
 
@@ -35,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteButton.textContent = 'Delete';
             deleteButton.addEventListener('click', () => {
                 tasks = tasks.filter(t => t.id !== task.id);
+                saveTasks();
                 renderTasks();
             });
 
@@ -70,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 completed: false
             };
             tasks.push(newTask);
+            saveTasks();
             renderTasks();
             taskInput.value = '';
         }
